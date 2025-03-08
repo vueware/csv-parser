@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 
-export const parse = (filePath: string): any[] => {
+export const parse = (filePath: string, delimiter?: string): any[] => {
   try {
     // Read the file content
     const data = readFileSync(filePath, "utf-8");
@@ -15,7 +15,9 @@ export const parse = (filePath: string): any[] => {
     }
 
     // Split headers
-    const headers = headerLine.split(",").map((header) => header.trim());
+    const headers = headerLine
+      .split(delimiter || ",")
+      .map((header) => header.trim());
     if (headers.length === 0) {
       throw new Error("No valid headers found.");
     }
@@ -30,7 +32,7 @@ export const parse = (filePath: string): any[] => {
 
     // Process the data
     return lines.map((line, lineIndex) => {
-      const values = line.split(",");
+      const values = line.split(delimiter || ",");
 
       // If the line doesn't have enough values, throw an error
       if (values.length !== headers.length) {
@@ -52,10 +54,3 @@ export const parse = (filePath: string): any[] => {
     return [];
   }
 };
-
-export const main = () => {
-  const data = parse("./input/data.csv");
-  console.log(data);
-};
-
-main();
