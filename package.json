@@ -1,6 +1,6 @@
 {
   "name": "@vueware/csv-parser",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Converts .csv files to JSON object arrays.",
   "private": false,
   "keywords": [
