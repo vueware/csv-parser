@@ -1,3 +1,3 @@
 declare module "@vueware/csv-parser" {
-  export function parseCSV(input: string, delimiter?: string): any[];
+  export function parse(input: string, delimiter?: string): any[];
 }
