@@ -9,20 +9,27 @@ export const parse = (filePath: string, delimiter?: string): any[] => {
     }
 
     // Split the content into lines
-    const [headerLine, ...lines] = data.trim().split("\n");
-    if (!headerLine) {
-      throw new Error("The first line (headers) is missing.");
+    const lines = data.trim().split("\n");
+    if (lines.length === 0) {
+      throw new Error("The file contains no valid data.");
     }
 
-    // Split headers
-    const headers = headerLine
-      .split(delimiter || ",")
-      .map((header) => header.trim());
-    if (headers.length === 0) {
-      throw new Error("No valid headers found.");
+    // Determine if the first line is a header
+    let headers: string[];
+    let dataLines: string[];
+
+    if (lines.length === 1) {
+      // If only one line exists, create generic headers
+      const values = lines[0].split(delimiter || ",");
+      headers = values.map((_, index) => `column${index + 1}`);
+      dataLines = [lines[0]];
+    } else {
+      // Use the first line as headers
+      headers = lines[0].split(delimiter || ",").map((header) => header.trim());
+      dataLines = lines.slice(1);
     }
 
-    // Function to check if a value is a valid number (without spaces)
+    // Function to check if a value is a valid number
     const parseValue = (value: string): string | number => {
       const trimmedValue = value.trim();
       return isNaN(Number(trimmedValue)) || trimmedValue.includes(" ")
@@ -31,21 +38,14 @@ export const parse = (filePath: string, delimiter?: string): any[] => {
     };
 
     // Process the data
-    return lines.map((line, lineIndex) => {
+    return dataLines.map((line, _lineIndex) => {
       const values = line.split(delimiter || ",");
 
-      // If the line doesn't have enough values, throw an error
-      if (values.length !== headers.length) {
-        throw new Error(
-          `Error in line ${
-            lineIndex + 1
-          }: the number of values does not match the number of headers.`
-        );
-      }
+      // If the line doesn't have enough values, fill with empty strings
+      while (values.length < headers.length) values.push("");
 
       return headers.reduce((obj, header, index) => {
-        const value = parseValue(values[index] || "");
-        obj[header] = value;
+        obj[header] = parseValue(values[index] || "");
         return obj;
       }, {} as Record<string, string | number>);
     });

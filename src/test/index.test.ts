@@ -25,11 +25,21 @@ describe("CSV Parser", () => {
     expect(result).toEqual([]);
   });
 
-  it("should handle mismatched columns", () => {
+  it("should handle a CSV file with only one line of data (no headers)", () => {
+    (readFileSync as jest.Mock).mockReturnValue("Alice,30");
+
+    const result = parse("dummy.csv");
+    expect(result).toEqual([{ column1: "Alice", column2: 30 }]);
+  });
+
+  it("should handle a CSV file with missing values by filling with empty strings", () => {
     (readFileSync as jest.Mock).mockReturnValue("name,age\nAlice\nBob,25");
 
     const result = parse("dummy.csv");
-    expect(result).toEqual([]);
+    expect(result).toEqual([
+      { name: "Alice", age: 0 },
+      { name: "Bob", age: 25 },
+    ]);
   });
 
   it("should use a custom delimiter", () => {

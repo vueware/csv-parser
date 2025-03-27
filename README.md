@@ -2,7 +2,7 @@
 
 # @vueware/csv-parser
 
-`@vueware/csv-parser` is a simple TypeScript library that converts CSV files into an array of JSON objects. It supports custom delimiters and includes basic error handling.
+`@vueware/csv-parser` is a simple TypeScript library that converts CSV files into an array of JSON objects. It supports no headers, custom delimiters and includes basic error handling.
 
 ## Installation
 
