@@ -33,10 +33,12 @@ export const parse = (filePath: string, delimiter?: string): any[] => {
     const parseValue = (value: string): string | number => {
       const trimmedValue = value.trim();
       if (trimmedValue === "") return "";
+      if (/^0\d+$/g.test(trimmedValue)) return trimmedValue;
       return isNaN(Number(trimmedValue)) || trimmedValue.includes(" ")
         ? trimmedValue
         : Number(trimmedValue);
     };
+
     // Process the data
     return dataLines.map((line, _lineIndex) => {
       const values = line.split(delimiter || ",");
