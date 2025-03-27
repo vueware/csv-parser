@@ -32,11 +32,11 @@ export const parse = (filePath: string, delimiter?: string): any[] => {
     // Function to check if a value is a valid number
     const parseValue = (value: string): string | number => {
       const trimmedValue = value.trim();
+      if (trimmedValue === "") return "";
       return isNaN(Number(trimmedValue)) || trimmedValue.includes(" ")
         ? trimmedValue
         : Number(trimmedValue);
     };
-
     // Process the data
     return dataLines.map((line, _lineIndex) => {
       const values = line.split(delimiter || ",");

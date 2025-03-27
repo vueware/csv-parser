@@ -37,7 +37,7 @@ describe("CSV Parser", () => {
 
     const result = parse("dummy.csv");
     expect(result).toEqual([
-      { name: "Alice", age: 0 },
+      { name: "Alice", age: "" },
       { name: "Bob", age: 25 },
     ]);
   });
